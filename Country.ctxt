@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Country
+comment0.text=\n\ Represents\ a\ country\ with\ a\ network\ of\ roads\ and\ cities.\n\n\ @author\ Johanne\ Holmstr\u00F8m\ Have\n\ @author\ Anna\ Nygaard\ Ravn\n\ @version\ 1.0\n
+comment1.params=name
+comment1.target=Country(java.lang.String)
+comment1.text=\n\ Creates\ a\ new\ country\n\ @param\ name\ the\ name\ of\ the\ country\n
+comment2.params=
+comment2.target=java.util.Set\ getCities()
+comment2.text=\n\ Retrieves\ and\ returns\ all\ the\ cities\ in\ the\ network\n\ @return\ all\ the\ cities\ in\ the\ network\n
+numComments=3
