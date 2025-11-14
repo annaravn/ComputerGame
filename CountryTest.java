@@ -1,0 +1,148 @@
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.*;
+import java.util.HashSet;
+
+/**
+ * The test class CountryTest.
+ *
+ * @author  (your name)
+ * @version (a version number or a date)
+ */
+public class CountryTest
+{
+    private Game game;
+    private Country country1, country2;
+    private City cityA, cityB, cityC, cityD, cityE, cityF, cityG;
+
+    /**
+     * Default constructor for test class CountryTest
+     */
+    public CountryTest()
+    {
+    }
+
+    /**
+     * Sets up the test fixture.
+     *
+     * Called before every test case method.
+     */
+    @BeforeEach
+    public void setUp()
+    {
+        // Create countries
+        country1 = new Country("Country 1");
+        country2 = new Country("Country 2");
+
+        // Create cities
+        cityA = new City("City A", 80, country1);
+        cityB = new City("City B", 60, country1);
+        cityC = new City("City C", 40, country1);
+        cityD = new City("City D", 100, country1);
+        cityE = new City("City E", 50, country2);
+        cityF = new City("City F", 90, country2);
+        cityG = new City("City G", 70, country2);
+
+        // Connect cities to countries
+        country1.addCity(cityA);
+        country1.addCity(cityB);
+        country1.addCity(cityC);
+        country1.addCity(cityD);
+
+        country2.addCity(cityE);
+        country2.addCity(cityF);
+        country2.addCity(cityG);
+
+        // Create roads
+        country1.addRoads(cityA, cityB, 4);
+        country1.addRoads(cityA, cityC, 3);
+        country1.addRoads(cityA, cityD, 5);
+        country1.addRoads(cityB, cityD, 2);
+        country1.addRoads(cityC, cityD, 2);
+        country1.addRoads(cityC, cityE, 4);
+        country1.addRoads(cityD, cityF, 3);
+        country2.addRoads(cityE, cityC, 4);
+        country2.addRoads(cityE, cityF, 2);
+        country2.addRoads(cityE, cityG, 5);
+        country2.addRoads(cityF, cityD, 3);
+        country2.addRoads(cityF, cityG, 6);
+    }
+
+    @Test
+    public void constructor() {
+        //test constructor for country1
+        assertEquals("Country 1", country1.getName());
+
+        //test constructor for country2
+        assertEquals("Country 2", country2.getName());
+    }
+
+    @Test
+    public void getCities() {
+        //making a test set for each country
+        Set<City> cities1 = new HashSet();
+        cities1.add(cityA);
+        cities1.add(cityB);
+        cities1.add(cityC);
+        cities1.add(cityD);
+
+        Set<City> cities2 = new HashSet();
+        cities2.add(cityE);
+        cities2.add(cityF);
+        cities2.add(cityG);
+
+        assertEquals(cities2, country2.getCities());
+        assertEquals(cities1, country1.getCities());
+    }
+
+    @Test 
+    public void getCity() {
+        //testing if we can find a city we know is in a country, and also
+        //the case where the city is not in the country
+        assertEquals(cityA, country1.getCity("City A"));
+        assertEquals(null, country1.getCity("City F"));
+
+        assertEquals(cityF, country2.getCity("City F"));
+        assertEquals(null, country2.getCity("City A"));
+    }
+
+    @Test
+    public void getRoads() {
+        //making a test set for each country
+        Set<Road> roads = new HashSet<>();
+        
+        assertEquals(roads, country1.getRoads(cityG));
+        
+        roads.add(new Road(cityA, cityB, 4));
+        roads.add(new Road(cityA, cityC, 3));
+        roads.add(new Road(cityA, cityD, 5));
+
+        Set<Road> roads2 = new HashSet<>();
+        
+        assertEquals(roads2, country2.getRoads(cityA));
+        
+        roads2.add(new Road(cityE, cityC, 4));
+        roads2.add(new Road(cityE, cityF, 2));
+        roads2.add(new Road(cityE, cityG, 5));
+
+        assertEquals(roads, country1.getRoads(cityA));
+
+        assertEquals(roads2, country2.getRoads(cityE));
+
+
+    }
+
+
+    /**
+     * Tears down the test fixture.
+     *
+     * Called after every test case method.
+     */
+    @AfterEach
+    public void tearDown()
+    {
+    }
+}
