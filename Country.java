@@ -3,20 +3,21 @@ import java.util.*;
 import java.util.Random;
 
 /**
-•  Represents a country with a network of roads and cities.
+ * Represents a country with a network of roads and cities.
  *
-•  @author Johanne Holmstrøm Have
-•  @author Anna Nygaard Ravn
-•  @version 1.0
+ * @author Johanne Holmstrøm Have
+ * @author Anna Nygaard Ravn
+ * @version 1.0
  */
 public class Country
 {
-    private String name;
-    private Map<City, Set<Road>> network;
-    private Game game;
+    private String name;                    //name of country
+    private Map<City, Set<Road>> network;   //cities in the country and their roads
+    private Game game;                      //the countrys game object
 
     /**
      * Creates a new country
+     * 
      * @param name the name of the country
      */
     public Country(String name) {
@@ -25,15 +26,8 @@ public class Country
     }
 
     /**
-     * Retrieves and returns the country's game object
-     * @return game the country's game object
-     */
-    public Game getGame() {
-        return game;
-    }
-
-    /**
      * Retrieves and returns the name of the country
+     * 
      * @return the name of the country
      */
     public String getName() {
@@ -41,22 +35,17 @@ public class Country
     }
 
     /**
-    ○  Retrieves and returns all the cities in the network
-    ○  @return all the cities in the network
+     * Retrieves and returns all the cities in the network
+     * 
+     * @return all the cities in the network
      */
     public Set<City> getCities() {
         return network.keySet();    
     }
 
     /**
-     * Sets the country's game variable to the given game object
-     */
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    /**
      * Retrieves and returns the city with the given name
+     * 
      * @param the name of the city we want to find
      * @return the city or null if no city with the given name exists
      */
@@ -71,6 +60,7 @@ public class Country
 
     /**
      * Retrieves and returns all roads starting in the given city
+     * 
      * @param the city from which the roads we want to find starts
      * @return the roads starting in the given city
      */
@@ -83,6 +73,15 @@ public class Country
     }
 
     /**
+     * Retrieves and returns the countrys game object
+     * 
+     * @return the countrys game object
+     */
+    public Game getGame() {
+        return game;
+    }
+    
+    /**
      * Resets the value of all cities in the country to their inital value.
      */
     public void reset() {
@@ -93,6 +92,7 @@ public class Country
 
     /**
      * Calculates the size of the bonus the player recieves
+     * 
      * @param value of city
      * @return the bonus given to the player
      */
@@ -107,7 +107,8 @@ public class Country
 
     /**
      * Adds the given city to the network
-     * @param c the city we wish to add to the network
+     * 
+     * @param the city we wish to add to the network
      */
     public void addCity(City c) {
         network.put(c, new TreeSet<>());
@@ -115,6 +116,7 @@ public class Country
 
     /**
      * Adds roads between a and b
+     * 
      * @param a the first city
      * @param b the second city
      * @param length the length between a and b
@@ -138,6 +140,7 @@ public class Country
 
     /**
      * Retrieves and returns the given city's position within the country
+     * 
      * @param the city that we want the position of
      * @return the city's position
      */
@@ -148,7 +151,7 @@ public class Country
 
     /**
      * Changes the position so that the player is heading towards the destination city, if there
-     * is a direct road. 
+     * is a direct road.
      * 
      * @param from the origin city
      * @param to the destination city
@@ -169,15 +172,25 @@ public class Country
         }
         for (Road r : roadsFrom) {
             if (r.getTo().equals(to)) {
-                return new Position(from, to, r.getLength());
+                return new Position(from, to, r.getLength()); 
             }
         }
         return position(from);
     }
+
+    /**
+     * Sets game to the given game
+     * 
+     * @param the game you wish to change to
+     */
+    public void setGame(Game game) {
+        this.game = game;
+    }
     
     /**
-     * Returns the country object in string form.
-     * @return the country's name
+     * Returns the country object in string form
+     * 
+     * @return the countrys name
      */
     @Override
     public String toString() {
@@ -185,11 +198,13 @@ public class Country
     }
 
     /**
-     * Returns a boolean depending on whether the input is equal to this object or not.
+     * Returns a boolean
      * A country object is equal to another country object if and only if
      * they have the same name
-     * @param o some other object we want to compare to this object
-     * @return true if the param object is equal to this object, false if not
+
+     * @param the object we want to compare with
+     * 
+     * @return true if the two countries are equal and false if they are not
      */
     @Override 
     public boolean equals(Object o) {
@@ -206,10 +221,10 @@ public class Country
         return name.equals(other.name);
     }
 
-      /**
-     * Takes the hashCode for the field variables used in the equals method of the 
-     * Country object.
-     * @return hashCode for the Country object
+    /**
+     * Returns hashcode of name
+     * 
+     * @return hashcode of name
      */
     @Override
     public int hashCode() {

@@ -1,19 +1,20 @@
 import java.util.Objects;
 /**
-•  Represents a road bewteen two cities on the board.
+ * Represents a road bewteen two cities on the board.
  *
-•  @author Johanne Holmstrøm Have
-•  @author Anna Nygaard Ravn
-•  @version 1.0
+ * @author Johanne Holmstrøm Have
+ * @author Anna Nygaard Ravn
+ * @version 1.0
  */
 public class Road implements Comparable<Road>
 {
-    private final City from;
-    private final City to;
-    private final int length;
+    private final City from;        //the city the road starts in
+    private final City to;          //the city the road ends in
+    private final int length;       //lengt of road
     
     /**
      * Creates a new road between two cities. 
+
      * @param from the origin city.
      * @param to the destination city. 
      */ 
@@ -25,30 +26,34 @@ public class Road implements Comparable<Road>
     
     /**
      * Retrieves and returns road's origin city
+     * 
      * @return the origin city
      */
     public City getFrom() {
         return from;
     }
     
-    /** 
-      * Retrieves and returns road's destination city
-      * @return the destination city
+     /**
+     * Retrieves and returns road's destination city
+     * 
+     * @return the destination city
      */
     public City getTo() {
         return to;
     }
     
-    /**
+      /**
      * Retrieves and returns road's length
+     * 
      * @return the length
      */
     public int getLength() {
         return length;
     }
     
-    /** 
-     * Returns the Road object in string form 
+    /**
+     * Returns the Road object in string form
+     * 
      * @return the departure and destination city and the length between these cities
      */
     @Override
@@ -60,8 +65,9 @@ public class Road implements Comparable<Road>
      * Compares one Road object to another. Is used to sort Collections.
      * Roads are first sorted in the alphabetical order of the cities they start in.
      * Secundary they are sorted after the city they end in.
-     * At last they are sorted after length (short to long). 
-     * @param other Road we want to compare to 
+     * At last they are sorted after length (short to long).
+     * 
+     * @param other Road we want to compare to
      * @return an Integer for the comperator.
      */
     @Override
@@ -82,6 +88,7 @@ public class Road implements Comparable<Road>
      * and the same length
      * 
      * @param the object we want to compare with
+     * 
      * @return true if the two roads are equal and false if they are not
      */
     @Override
@@ -101,6 +108,7 @@ public class Road implements Comparable<Road>
     
     /**
      * Returns hashcode of to, from and length
+     * 
      * @return hashcode of to, from and length
      */
     @Override 

@@ -8,15 +8,16 @@ import java.util.Objects;
  */
 public class City implements Comparable<City>
 {
-    private final String name;
-    private int value;
-    private int initialValue;
-    private Country country;
+    private final String name;      //name of city
+    private int value;              //current value of city
+    private int initialValue;       //initial value of city
+    private Country country;        //the country of the city
 
     /**
-    ○  Creates a new city with the specified name and value. 
-    ○  @param name the name of the new city.
-    ○  @param value the initial value of the new city. 
+     * Creates a new city with the specified name and value. 
+     * 
+     * @param name the name of the new city.
+     * @param value the initial value of the new city. 
      */ 
     public City(String name, int value, Country country) {
         this.name = Objects.requireNonNull(name);
@@ -27,6 +28,7 @@ public class City implements Comparable<City>
 
     /**
      * Adds a given amount to the value of the city
+     * 
      * @param amount the number of points we want to add to the city's value
      */
     public void changeValue(int amount) {
@@ -42,6 +44,7 @@ public class City implements Comparable<City>
 
     /**
      * Retrieves and returns the name of the city
+     * 
      * @return the name
      */
     public String getName(){
@@ -50,6 +53,7 @@ public class City implements Comparable<City>
 
     /**
      * Retrieves and returns the country where the city resides 
+     * 
      * @return the country
      */
     public Country getCountry(){
@@ -58,6 +62,7 @@ public class City implements Comparable<City>
 
     /**
      * Retrieves and returns the value of the city
+     * 
      * @return the value
      */
     public int getValue(){
@@ -66,15 +71,17 @@ public class City implements Comparable<City>
 
     /**
      * Retrieves and returns the initial value of the city
+     * 
      * @return the initial value
      */
     public int getInitialValue(){
         return initialValue;
     }
-    
+
     /**
      * Retrives a random bonus depending on which country the city resides in. Subtracts 
      * the bonus from the cities current value.
+     * 
      * @return the random bonus
      */
     public int arrive() {
@@ -86,16 +93,18 @@ public class City implements Comparable<City>
     /**
      * Returns the City object in string form. The string contains the city's name 
      * and value
+     * 
      * @return A string containing the city's name and value
      */
     @Override
     public String toString() {
         return name + " (" + value + ")";  
     }
-    
+
     /**
-     * Compares one City object to another. Is used to sort City Collections. Cities
-     * are sorted in the alphabetical order of their names. 
+     * Compares one City object to another. Is used to sort city Collections. Cities
+     * are sorted in the alphabetical order of their names.
+     * 
      * @param other another City object
      * @return An Integer for the comparator. 
      */
@@ -108,6 +117,7 @@ public class City implements Comparable<City>
      * Returns a boolean depending on whether the input is equal to this object or not.
      * A City object is equal to another country object if and only if
      * they have the same name and they are in the same country
+     * 
      * @param o some other object we want to compare to this object
      * @return true if the param object is equal to this object, false if not
      */
@@ -128,7 +138,8 @@ public class City implements Comparable<City>
 
     /**
      * Takes the hashCode for the field variables used in the equals method of the 
-     * City object and creates new hashCode.
+     * City object and creates a new hashCode.
+     * 
      * @return hashCode for the City object
      */
     @Override
