@@ -100,7 +100,7 @@ public class CountryTest
     @Test
     public void bonus() {
         country1.setGame(game);
-        
+
         //Test with value 80
         for(int seed=0; seed<100; seed++) {         //Try 100 different seeds
             game.getRandom().setSeed(seed);
@@ -116,7 +116,7 @@ public class CountryTest
             assertTrue(expectedSum *0.99 <= sum && sum <= expectedSum * 1.01);
             assertEquals((80+1), values.size());
         }
-        
+
         //Test with value 1
         for(int seed=0; seed<100; seed++) {         //Try 100 different seeds
             game.getRandom().setSeed(seed);
@@ -132,7 +132,7 @@ public class CountryTest
             assertTrue(expectedSum *0.99 <= sum && sum <= expectedSum * 1.01);
             assertEquals((1+1), values.size());
         }
-        
+
         //Test with value 0
         assertEquals(0, country1.bonus(0));
         //Since we never pick any random values, when bonus is called with 0,
@@ -217,55 +217,55 @@ public class CountryTest
 
         //the amount of roads should be unchanged
         assertEquals(2, country1.getRoads(city1).size());
-        
+
         //we try adding a road of length zero
         country1.addRoads(city1, cityA, 0);
-        
+
         //again the amount should be unchanged
         assertEquals(2, country1.getRoads(city1).size());
-        
+
         //we try inserting a road between two cities not in the country        
         country1.addRoads(cityF, city2, 3);
-        
+
         //we expect that no roads will be added
         assertEquals(0, country1.getRoads(cityF).size());
     }
-    
+
     @Test
     public void position() {
         //create a test position
         Position p1 = new Position(cityA, cityA, 0);
         assertEquals(p1, country1.position(cityA));
-        
+
         //create another test position
         Position p2 = new Position(cityE, cityE, 0);
         assertEquals(p2, country2.position(cityE));
     }
-    
+
     @Test 
     public void readyToTravel() {
         //test for two different cities within the same country
         assertEquals(new Position(cityA, cityB, 4), country1.readyToTravel(cityA, cityB));
-        
+
         //test for two different cities one in the country, another in a 
         //different country
         assertEquals(new Position(cityC, cityE, 4), country1.readyToTravel(cityC, cityE));
-        
+
         //test for the same two cities
         assertEquals(new Position(cityA, cityA, 0), country1.readyToTravel(cityA, cityA));
-        
+
         //test the case where the from city is not in the country
         assertEquals(new Position(cityF, cityF, 0), country1.readyToTravel(cityF, cityA));
-        
+
         //test the case where there are no roads from the given city
         City cityT = new City("City T", 80, country1);
         country1.addCity(cityT);
         assertEquals(new Position(cityT, cityT, 0), country1.readyToTravel(cityT, cityA));
-        
+
         //test the case where there the destination city from the origin city doesn't exist
         assertEquals(new Position(cityA, cityA, 0), country1.readyToTravel(cityA, cityT));
     }
-    
+
     @Test
     public void testToString() {
         assertEquals("Country 1", country1.toString());
