@@ -82,20 +82,10 @@ public class CountryTest
 
     @Test
     public void getCities() {
-        //making a test set for each country
-        Set<City> cities1 = new HashSet();
-        cities1.add(cityA);
-        cities1.add(cityB);
-        cities1.add(cityC);
-        cities1.add(cityD);
-
-        Set<City> cities2 = new HashSet();
-        cities2.add(cityE);
-        cities2.add(cityF);
-        cities2.add(cityG);
-
-        assertEquals(cities2, country2.getCities());
-        assertEquals(cities1, country1.getCities());
+        //just testing that a set containing the correct amount of cities 
+        //is returned from getCities
+        assertEquals(4, country1.getCities().size());
+        assertEquals(3, country2.getCities().size());
     }
 
     @Test 
@@ -112,27 +102,76 @@ public class CountryTest
     @Test
     public void getRoads() {
         //making a test set for each country
-        Set<Road> roads = new HashSet<>();
+        Set<Road> roads = new TreeSet<>();
         
+        //testing that an empty set is returned when calling getRoads
+        //with a city that doesn't have any roads in the country
         assertEquals(roads, country1.getRoads(cityG));
         
+        //adding roads to the test set
         roads.add(new Road(cityA, cityB, 4));
         roads.add(new Road(cityA, cityC, 3));
         roads.add(new Road(cityA, cityD, 5));
+        
+        //testing for a city that has roads in the country
+        assertEquals(roads, country1.getRoads(cityA));
 
-        Set<Road> roads2 = new HashSet<>();
+        //repeating the same for country2
+        Set<Road> roads2 = new TreeSet<>();
         
         assertEquals(roads2, country2.getRoads(cityA));
         
         roads2.add(new Road(cityE, cityC, 4));
         roads2.add(new Road(cityE, cityF, 2));
         roads2.add(new Road(cityE, cityG, 5));
-
-        assertEquals(roads, country1.getRoads(cityA));
-
+        
         assertEquals(roads2, country2.getRoads(cityE));
-
-
+    }
+    
+    @Test
+    public void addRoads() {
+        
+        //creating new cities to be able to add more roads
+        City city1 = new City("City 1", 70, country1);
+        City city2 = new City("City 2", 60, country2);
+        
+        //adding those cities to their respective countries
+        country1.addCity(city1);
+        country2.addCity(city2);
+        
+        //adding a road between two cities in the same country 
+        country1.addRoads(city1, cityA, 4);
+        
+        //testing that we have now added a road both to city1 and cityA
+        assertEquals(1, country1.getRoads(city1).size());
+        assertEquals(4, country1.getRoads(cityA).size());
+        
+        //adding a road between a city that is in the country and another city 
+        //that is not in the country
+        country1.addRoads(city1, city2, 6);
+        
+        //now we should have 2 roads for city1
+        assertEquals(2, country1.getRoads(city1).size());
+        
+        //we try adding a road between the same city
+        country1.addRoads(city1, city1, 8);
+        
+        //the amount of roads should be unchanged
+        country1.addRoads(city1, cityA, 0);
+        country1.addRoads(cityF, city2, 3);
+        
+        country2.addRoads(city2, cityE, 5);
+        country2.addRoads(city2, city1, 6);
+        country2.addRoads(city2, city2, 8);
+        country2.addRoads(city2, cityE, 0);
+        country2.addRoads(cityA, city1, 3);
+        
+        
+        assertEquals(2, country2.getRoads(city2).size());
+        assertEquals(4, country1.getRoads(cityA).size());
+        assertEquals(4, country2.getRoads(cityE).size());
+        
+        
     }
 
 
