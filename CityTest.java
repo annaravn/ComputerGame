@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.Random;
 
 /**
  * The test class CityTest.
@@ -34,11 +35,13 @@ public class CityTest
 
     @Test
     public void arrive() {
+        country1.setGame(game);
+        
         //Test arrive on cityA
         for(int seed = 0; seed<1000; seed++) {          //Try different seeds
-            game.getRandom().setSeed(0);                //Set seed
+            game.getRandom().setSeed(seed);             //Set seed
             int bonus = country1.bonus(80);             //Remember bonus
-            game.getRandom().setSeed(0);                //Reset seed
+            game.getRandom().setSeed(seed);             //Reset seed
             assertEquals(bonus, cityA.arrive());        //same bonus
             assertEquals(80-bonus, cityA.getValue());   //Correct value after arrive
             cityA.reset();
@@ -93,6 +96,9 @@ public class CityTest
     @BeforeEach
     public void setUp()
     {
+        //Create game
+        game = new Game();
+        
         // Create countries
         country1 = new Country("Country 1");
         country2 = new Country("Country 2");
