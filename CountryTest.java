@@ -9,8 +9,9 @@ import java.util.HashSet;
 /**
  * The test class CountryTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author  Johanne Holmstrøm Have 
+ * @author Anna Nygaard Ravn
+ * @version 1.0 (15/11-25)
  */
 public class CountryTest
 {

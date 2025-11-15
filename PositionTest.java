@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 /**
  * The test class PositionTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author  Johanne Holmstrøm Have 
+ * @author Anna Nygaard Ravn
+ * @version 1.0 (15/11-25)
  */
 public class PositionTest
 {
