@@ -37,7 +37,7 @@ public class CityTest
     @Test
     public void arrive() {
         country1.setGame(game);
-        
+        int sum = 0;
         //Test arrive on cityA
         for(int seed = 0; seed<1000; seed++) {          //Try different seeds
             game.getRandom().setSeed(seed);             //Set seed
@@ -46,9 +46,14 @@ public class CityTest
             assertEquals(bonus, cityA.arrive());        //same bonus
             assertEquals(80-bonus, cityA.getValue());   //Correct value after arrive
             cityA.reset();
+            sum += bonus;
         }
+
+        int expectedSum = 1000 * 80/2; // Expected sum of all bonuses.
+        // Testing if sum and expected sum are equal (with a 3% margin)
+        assertTrue(expectedSum * 0.97 <= sum && expectedSum * 1.03 >= sum);
     }
-    
+
     @Test
     public void changeValue() {
         //Test changeValue when adding
@@ -65,7 +70,7 @@ public class CityTest
         }
         assertEquals(80, cityA.getValue());
     }
-    
+
     @Test
     public void reset() {
         for (int i = 0; i<100; i++) {
@@ -74,17 +79,17 @@ public class CityTest
             assertEquals(80, cityA.getValue());
         }
     }
-    
+
     @Test
     public void testToString() {
         assertEquals("City A (80)", cityA.toString());
-        
+
         cityA.changeValue(-80);
         assertEquals("City A (0)", cityA.toString());
-        
+
         cityA.changeValue(20);
         assertEquals("City A (20)", cityA.toString());
-        
+
         cityA.reset();
         assertEquals("City A (80)", cityA.toString());
     }
@@ -99,7 +104,7 @@ public class CityTest
     {
         //Create game
         game = new Game();
-        
+
         // Create countries
         country1 = new Country("Country 1");
         country2 = new Country("Country 2");
