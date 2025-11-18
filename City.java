@@ -89,6 +89,11 @@ public class City implements Comparable<City>
         value -= bonus;
         return bonus;
     }
+    
+    public int arrive (Player p) 
+    { 
+        return arrive(); 
+    }
 
     /**
      * Returns the City object in string form. The string contains the city's name 
