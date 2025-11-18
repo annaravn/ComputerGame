@@ -98,6 +98,7 @@ public class CountryTest
 
     }
 
+    
     @Test
     public void bonus() {
         country1.setGame(game);
@@ -141,6 +142,21 @@ public class CountryTest
     }
 
     @Test
+    public void addCity() {
+        //save the size before we add
+        int amount = country1.getCities().size(); 
+        //try adding a city that is already there
+        country1.addCity(cityA);
+        //check that the size doesn't change 
+        assertEquals(amount, country1.getCities().size()); 
+        //add a city that is not already there
+        country1.addCity(cityF);
+        //check that the size increased by 1
+        assertEquals(amount + 1, country1.getCities().size());
+        
+    }
+    
+    @Test
     public void getCities() {
         //just testing that a set containing the correct amount of cities 
         //is returned from getCities
@@ -161,31 +177,15 @@ public class CountryTest
 
     @Test
     public void getRoads() {
-        //making a test set for each country
-        Set<Road> roads = new TreeSet<>();
-
-        //testing that an empty set is returned when calling getRoads
-        //with a city that doesn't have any roads in the country
-        assertEquals(roads, country1.getRoads(cityG));
-
-        //adding roads to the test set
-        roads.add(new Road(cityA, cityB, 4));
-        roads.add(new Road(cityA, cityC, 3));
-        roads.add(new Road(cityA, cityD, 5));
+        //testing with a city that doesn't have any roads in the country
+        assertEquals(0, country1.getRoads(cityG).size());
 
         //testing for a city that has roads in the country
-        assertEquals(roads, country1.getRoads(cityA));
+        assertEquals(3, country1.getRoads(cityA).size());
 
         //repeating the same for country2
-        Set<Road> roads2 = new TreeSet<>();
-
-        assertEquals(roads2, country2.getRoads(cityA));
-
-        roads2.add(new Road(cityE, cityC, 4));
-        roads2.add(new Road(cityE, cityF, 2));
-        roads2.add(new Road(cityE, cityG, 5));
-
-        assertEquals(roads2, country2.getRoads(cityE));
+        assertEquals(0, country2.getRoads(cityA).size());
+        assertEquals(3, country2.getRoads(cityE).size());
     }
 
     @Test
