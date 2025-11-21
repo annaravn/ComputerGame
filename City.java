@@ -1,10 +1,9 @@
 import java.util.Objects;
 /**
-•  Represents a city on the board.
- *
-•  @author Johanne Holmstrøm Have
-•  @author Anna Nygaard Ravn
-•  @version 1.0
+ * Represents a city on the board.
+ * @author Johanne Holmstrøm Have
+ * @author Anna Nygaard Ravn
+ * @version 1.0
  */
 public class City implements Comparable<City>
 {
