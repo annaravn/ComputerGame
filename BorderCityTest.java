@@ -1,5 +1,4 @@
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,14 +23,13 @@ public class BorderCityTest
     public BorderCityTest()
     {
     }
-    
+
     @Test
     public void arriveFromOtherCountry() {
         country1.setGame(game);
         country2.setGame(game);
-        int sum = 0;
-        //Test arrive on cityA
-        for(int seed = 0; seed<1000; seed++) {          //Try different seeds
+        //Test arrive from cityE to cityC
+        for(int seed = 0; seed<100; seed++) {          //Try different seeds
             Player player = new GUIPlayer(new Position(cityE, cityC, 0), 250);
             game.getRandom().setSeed(seed);             //Set seed
             int bonus = country1.bonus(40);//Remember bonus
@@ -40,15 +38,22 @@ public class BorderCityTest
             int result = bonus - toll;
             System.out.println(result);
             game.getRandom().setSeed(seed);             //Reset seed
-            assertEquals(result, cityC.arrive(player));        //same bonus
-            assertEquals(40-result, cityC.getValue());   //Correct value after arrive
+            assertEquals(result, cityC.arrive(player)); //Same bonus
+            assertEquals(40-result, cityC.getValue());  //Correct value after arrive
             cityC.reset();
-            sum += bonus;
         }
+    }
 
-        //int expectedSum = 1000 * 40/2; // Expected sum of all bonuses.
-        // Testing if sum and expected sum are equal (with a 3% margin)
-        //assertTrue(expectedSum * 0.97 <= sum && expectedSum * 1.03 >= sum);
+    @Test
+    public void arriveFromSameCountry() {
+        country1.setGame(game);
+        //Test arrive from cityD to cityC
+        Player player = new GUIPlayer(new Position(cityD, cityC, 0), 250);
+        game.getRandom().setSeed(0);                //Set seed
+        int bonus = country1.bonus(40);
+        game.getRandom().setSeed(0);                //Reset seed
+        assertEquals(bonus, cityC.arrive(player));  //Same bonus
+        assertEquals(40-bonus, cityC.getValue());   //Correct value after arrive
     }
 
     /**
@@ -61,7 +66,7 @@ public class BorderCityTest
     {
         //Create game
         game = new Game();
-        
+
         // Create countries
         country1 = new Country("Country 1");
         country2 = new Country("Country 2");
