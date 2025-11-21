@@ -87,7 +87,6 @@ public class City implements Comparable<City>
     public int arrive() {
         int bonus = country.bonus(value);
         value -= bonus;
-        System.out.println("Bonus: " + bonus);
         return bonus;
     }
     

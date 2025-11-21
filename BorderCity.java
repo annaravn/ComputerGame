@@ -21,7 +21,7 @@ public class BorderCity extends City
 
         int toll = (int)((double)p.getMoney() * (double)percentage/(double)100);
         int result = arrive() - toll; //subract the toll from the bonus the player recieves
-
+        changeValue(toll);
         return result; //subract the toll from the bonus the player recieves
 
         }
