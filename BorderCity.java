@@ -1,9 +1,10 @@
 
 /**
- * Write a description of class BorderCity here.
+ * Represents a border city which is a subclass of city
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Johanne Holmstrøm Have
+ * @author Anna Nygaard Ravn
+ * @version 1.0
  */
 public class BorderCity extends City
 {

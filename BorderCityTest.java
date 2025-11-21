@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 /**
  * The test class BorderCityTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author Johanne Holmstrøm Have
+ * @author Anna Nygaard Ravn
+ * @version 1.0
  */
 public class BorderCityTest
 {
