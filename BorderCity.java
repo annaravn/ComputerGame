@@ -24,5 +24,4 @@ public class BorderCity extends City
         changeValue(toll);
         return result; //subract the toll from the bonus the player recieves
         }
-        
     }

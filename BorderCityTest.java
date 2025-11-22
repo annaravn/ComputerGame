@@ -23,7 +23,7 @@ public class BorderCityTest
         country1.setGame(game);
         country2.setGame(game);
         //Test arrive from cityE to cityC
-        for(int seed = 0; seed<100; seed++) {          //Try different seeds
+        for(int seed = 0; seed<1000; seed++) {          //Try different seeds
             Player player = new GUIPlayer(new Position(cityE, cityC, 0), 250);
             game.getRandom().setSeed(seed);             //Set seed
             int bonus = country1.bonus(40);//Remember bonus
