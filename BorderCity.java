@@ -19,12 +19,10 @@ public class BorderCity extends City
             //Calculate the toll percentage
             percentage = getCountry().getGame().getSettings().getTollToBePaid();
         }
-
         int toll = (int)((double)p.getMoney() * (double)percentage/(double)100);
-        int result = arrive() - toll; //subract the toll from the bonus the player recieves
+        int result = super.arrive() - toll; //subract the toll from the bonus the player recieves
         changeValue(toll);
         return result; //subract the toll from the bonus the player recieves
-
         }
         
     }

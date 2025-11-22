@@ -1,22 +1,22 @@
 
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * The test class BorderCityTest.
+ * The test class CapitalCityTest.
  *
- * @author Johanne Holmstrøm Have
- * @author Anna Nygaard Ravn
- * @version 1.0
+ * @author  (your name)
+ * @version (a version number or a date)
  */
-public class BorderCityTest
+public class CapitalCityTest
 {
     private Game game;
     private Country country1, country2;
-    private City cityA, cityB, cityG;
-    private BorderCity cityC, cityD, cityE, cityF;
+    private City cityA, cityB, cityC, cityF, cityG;
+    private CapitalCity cityD, cityE;
 
     @Test
     public void arriveFromOtherCountry() {
@@ -47,7 +47,7 @@ public class BorderCityTest
         assertEquals(bonus, cityC.arrive(player));  //Same bonus
         assertEquals(40-bonus, cityC.getValue());   //Correct value after arrive
     }
-
+    
     /**
      * Sets up the test fixture.
      *
@@ -58,7 +58,7 @@ public class BorderCityTest
     {
         //Create game
         game = new Game();
-
+        
         // Create countries
         country1 = new Country("Country 1");
         country2 = new Country("Country 2");
@@ -66,11 +66,13 @@ public class BorderCityTest
         // Create cities
         cityA = new City("City A", 80, country1);
         cityB = new City("City B", 60, country1);
-        cityC = new BorderCity("City C", 40, country1);
-        cityD = new BorderCity("City D", 100, country1);
-        cityE = new BorderCity("City E", 50, country2);
-        cityF = new BorderCity("City F", 90, country2);
+        cityC = new City("City C", 40, country1);
+        cityF = new City("City F", 90, country2);
         cityG = new City("City G", 70, country2);
+        
+        //Create capital cities
+        cityD = new CapitalCity("City D", 100, country1);
+        cityE = new CapitalCity("City E", 50, country2);
 
         // Connect cities to countries
         country1.addCity(cityA);
