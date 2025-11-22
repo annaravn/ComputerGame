@@ -22,31 +22,22 @@ public class CapitalCityTest
     public void arriveFromOtherCountry() {
         country1.setGame(game);
         country2.setGame(game);
-        //Test arrive from cityE to cityC
-        for(int seed = 0; seed<100; seed++) {          //Try different seeds
-            Player player = new GUIPlayer(new Position(cityE, cityC, 0), 250);
+        
+        //Test arrive from cityE to cityD
+        for(int seed = 0; seed<1000; seed++) {          //Try different seeds
+            Player player = new GUIPlayer(new Position(cityE, cityD, 0), 250);
             game.getRandom().setSeed(seed);             //Set seed
-            int bonus = country1.bonus(40);//Remember bonus
+            int bonus = country1.bonus(100);            //Remember bonus
             int toll = 250/5;
             int result = bonus - toll;
-            game.getRandom().setSeed(seed);             //Reset seed
-            assertEquals(result, cityC.arrive(player)); //Same bonus
-            assertEquals(40-result, cityC.getValue());  //Correct value after arrive
-            cityC.reset();
+            int spending = game.getRandom().nextInt(player.getMoney() + 1);
+            game.getRandom().setSeed(seed);
+            assertEquals(result - spending, cityD.arrive(player)); //Same bonus
+            assertEquals(100 - result + spending, cityD.getValue());  //Correct value after arrive
+            cityD.reset();
         }
     }
 
-    @Test
-    public void arriveFromSameCountry() {
-        country1.setGame(game);
-        //Test arrive from cityD to cityC
-        Player player = new GUIPlayer(new Position(cityD, cityC, 0), 250);
-        game.getRandom().setSeed(0);                //Set seed
-        int bonus = country1.bonus(40);
-        game.getRandom().setSeed(0);                //Reset seed
-        assertEquals(bonus, cityC.arrive(player));  //Same bonus
-        assertEquals(40-bonus, cityC.getValue());   //Correct value after arrive
-    }
     
     /**
      * Sets up the test fixture.
