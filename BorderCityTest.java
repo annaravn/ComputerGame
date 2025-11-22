@@ -26,9 +26,9 @@ public class BorderCityTest
         for(int seed = 0; seed<1000; seed++) {          //Try different seeds
             Player player = new GUIPlayer(new Position(cityE, cityC, 0), 250);
             game.getRandom().setSeed(seed);             //Set seed
-            int bonus = country1.bonus(40);//Remember bonus
-            int toll = 250/5;
-            int result = bonus - toll;
+            int bonus = country1.bonus(40);             //Remember bonus
+            int toll = 250/5;                           //20% toll
+            int result = bonus - toll;                  //remember the player's money after bonus
             game.getRandom().setSeed(seed);             //Reset seed
             assertEquals(result, cityC.arrive(player)); //Same bonus
             assertEquals(40-result, cityC.getValue());  //Correct value after arrive

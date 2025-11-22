@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 /**
  * The test class CapitalCityTest.
  *
- * @author  (your name)
- * @version (a version number or a date)
+ * @author Johanne Holmstrøm Have
+ * @author Anna Nygaard Ravn
+ * @version 1.0
  */
 public class CapitalCityTest
 {
@@ -21,38 +22,37 @@ public class CapitalCityTest
     @Test
     public void arriveFromOtherCountry() {
         country1.setGame(game);
-        country2.setGame(game);
-        
         //Test arrive from cityE to cityD
         for(int seed = 0; seed<1000; seed++) {          //Try different seeds
             Player player = new GUIPlayer(new Position(cityE, cityD, 0), 250);
             game.getRandom().setSeed(seed);             //Set seed
             int bonus = country1.bonus(100);            //Remember bonus
-            int toll = 250/5;
-            int result = bonus - toll;
-            int spending = game.getRandom().nextInt(player.getMoney() + 1);
-            game.getRandom().setSeed(seed);
+            int toll = 250/5;                           //20% toll
+            int result = bonus - toll;                  //Remember the player's money after bonus
+            int spending = game.getRandom().nextInt(player.getMoney() + result + 1);
+            game.getRandom().setSeed(seed);             //Reset seed
             assertEquals(result - spending, cityD.arrive(player)); //Same bonus
             assertEquals(100 - result + spending, cityD.getValue());  //Correct value after arrive
-            cityD.reset();
+            cityD.reset(); //reset city's values and try with a new seed
         }
     }
     
     @Test
     public void arriveFromSameCountry() {
         country1.setGame(game);
-        //Test arrive from cityD to cityC
-        Player player = new GUIPlayer(new Position(cityD, cityC, 0), 250);
+        //Test arrive from cityC to cityD
+        Player player = new GUIPlayer(new Position(cityC, cityD, 0), 250);
         game.getRandom().setSeed(0);                //Set seed
-        int bonus = country1.bonus(40);
-        game.getRandom().setSeed(0);                //Reset seed
-        assertEquals(bonus, cityC.arrive(player));  //Same bonus
-        assertEquals(40-bonus, cityC.getValue());   //Correct value after arrive
+        int bonus = country1.bonus(100);            //Remember bonus
+        int spending = game.getRandom().nextInt(player.getMoney() + bonus + 1); //Remember money spent
+        game.getRandom().setSeed(0);                //Same bonus
+        assertEquals(bonus - spending, cityD.arrive(player));   //Check arrive return value
+        assertEquals(100-bonus + spending, cityD.getValue());   //Check city's value after arrive
     }
     
     /**
      * Sets up the test fixture.
-     *
+     
      * Called before every test case method.
      */
     @BeforeEach
