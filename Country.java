@@ -93,7 +93,7 @@ public class Country
     /**
      * Calculates the size of the bonus the player recieves
      * 
-     * @param value of city
+     * @param value of the specific city within the country
      * @return the bonus given to the player
      */
     public int bonus(int value) {
