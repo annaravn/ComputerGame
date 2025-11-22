@@ -37,7 +37,18 @@ public class CapitalCityTest
             cityD.reset();
         }
     }
-
+    
+    @Test
+    public void arriveFromSameCountry() {
+        country1.setGame(game);
+        //Test arrive from cityD to cityC
+        Player player = new GUIPlayer(new Position(cityD, cityC, 0), 250);
+        game.getRandom().setSeed(0);                //Set seed
+        int bonus = country1.bonus(40);
+        game.getRandom().setSeed(0);                //Reset seed
+        assertEquals(bonus, cityC.arrive(player));  //Same bonus
+        assertEquals(40-bonus, cityC.getValue());   //Correct value after arrive
+    }
     
     /**
      * Sets up the test fixture.
