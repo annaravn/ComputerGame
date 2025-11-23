@@ -1,5 +1,4 @@
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,33 +16,36 @@ public class MafiaCountryTest
     private Country country1, country2;
     private City cityA, cityB, cityC, cityD, cityE, cityF, cityG;
 
- 
     @Test
     public void bonus() {
-    country2.setGame(game);
-    
-    for(int seed = 0; seed < 1000; seed++) {
-        game.getRandom().setSeed(seed);
-        int robs = 0;
-        int loss = 0;
-        int sum = 0;
-        Set<Integer> values = new HashSet<>();
-        for (int i = 0; i < 50000; i++) {
-            int bonus = country2.bonus(80);
-            if (bonus < 0) { //robbery
-                robs++;
-                assertTrue(10 <= bonus && bonus <= 50);
-                loss -= bonus;
-                values.add(-bonus);
-            } else { //no robbery 
-                sum += bonus;
-                
+        country2.setGame(game);
+
+        for(int seed = 0; seed < 1000; seed++) {
+            game.getRandom().setSeed(seed);
+            int robs = 0;
+            int loss = 0;
+            Set<Integer> values = new HashSet<>();
+            for (int i = 0; i < 50000; i++) {
+                int bonus = country2.bonus(80);
+                if (bonus < 0) { //robbery
+                    robs++;
+                    assertTrue(10 <= bonus && bonus <= 50);
+                    loss -= bonus;
+                    values.add(-bonus);
+                } else { //no robbery 
+                    assertTrue(0 <= bonus && bonus <= 80);
+                }
             }
+            int expectedRobs = robs * 20 / 100;
+            int expectedLoss = 30;
+            assertTrue(expectedRobs * 0.97 <= robs && expectedRobs * 1.03 >= robs);
             
+            System.out.println("Loss: " + loss + "     , Expected Loss: " + expectedLoss);
+            //assertTrue(expectedLoss * 0.97 <= loss && expectedLoss * 1.03 >= loss);
+            assertEquals(41, values.size());
         }
-        
     }
-    }
+
     /**
      * Sets up the test fixture.
      *
@@ -52,6 +54,9 @@ public class MafiaCountryTest
     @BeforeEach
     public void setUp()
     {
+        //Create game
+        game = new Game();
+
         // Create countries
         country1 = new Country("Country 1");
         country2 = new MafiaCountry("Country 2");
