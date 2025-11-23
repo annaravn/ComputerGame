@@ -24,27 +24,41 @@ public class MafiaCountryTest
             game.getRandom().setSeed(seed);
             int robs = 0;
             int loss = 0;
-            Set<Integer> values = new HashSet<>();
+            int sum = 0;
+            Set<Integer> robbedValues = new HashSet<>();
+            Set<Integer> normalValues = new HashSet<>();
             for (int i = 0; i < 50000; i++) {
                 int bonus = country2.bonus(80);
                 if (bonus < 0) { //robbery
                     robs++;
-                    assertTrue(10 <= bonus && bonus <= 50);
+                    assertTrue(-10 >= bonus && bonus >= -50);
                     loss -= bonus;
-                    values.add(-bonus);
+                    robbedValues.add(-bonus);
                 } else { //no robbery 
+                    sum += bonus;
                     assertTrue(0 <= bonus && bonus <= 80);
+                    normalValues.add(bonus);
                 }
+
             }
-            int expectedRobs = robs * 20 / 100;
-            int expectedLoss = 30;
-            assertTrue(expectedRobs * 0.97 <= robs && expectedRobs * 1.03 >= robs);
-            
-            System.out.println("Loss: " + loss + "     , Expected Loss: " + expectedLoss);
-            //assertTrue(expectedLoss * 0.97 <= loss && expectedLoss * 1.03 >= loss);
-            assertEquals(41, values.size());
+
+            //check that player is robbed about 20 % of the time
+            assertTrue(9000 <= robs && robs <= 11000);
+
+            //we expect that the average bonus with no robbery is about 40 €
+            int expectedSum = (50000 - robs) * 80/2;
+            //we expect that the average amount robbed is about 30 €
+            int expectedLoss = robs * 30;
+
+            //check that the averages are as expected 
+            assertTrue(expectedSum * 0.97 <= sum && sum <= expectedSum * 1.03);
+            assertTrue(expectedLoss * 0.97 <= loss && loss <= expectedLoss * 1.03);
+
+            //check that all integer values happen at least once
+            assertEquals(80 + 1, normalValues.size());
+            assertEquals(40 + 1, robbedValues.size());
         }
-    }
+    }    
 
     /**
      * Sets up the test fixture.
@@ -56,7 +70,7 @@ public class MafiaCountryTest
     {
         //Create game
         game = new Game();
-
+        
         // Create countries
         country1 = new Country("Country 1");
         country2 = new MafiaCountry("Country 2");
@@ -104,4 +118,4 @@ public class MafiaCountryTest
     public void tearDown()
     {
     }
-}
+} 

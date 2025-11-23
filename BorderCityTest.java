@@ -42,7 +42,7 @@ public class BorderCityTest
         //Test arrive from cityD to cityC
         Player player = new GUIPlayer(new Position(cityD, cityC, 0), 250);
         game.getRandom().setSeed(0);                //Set seed
-        int bonus = country1.bonus(40);
+        int bonus = country1.bonus(40);             //remember bonus
         game.getRandom().setSeed(0);                //Reset seed
         assertEquals(bonus, cityC.arrive(player));  //Same bonus
         assertEquals(40-bonus, cityC.getValue());   //Correct value after arrive
