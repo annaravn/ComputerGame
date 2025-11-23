@@ -28,8 +28,7 @@ public class MafiaCountry extends Country
     public int bonus(int value) {
         int risk = getGame().getSettings().getRisk();
         if (getGame().getRandom().nextInt(100 + 1) <= risk) {
-            System.out.println(getGame().getLoss());
-            return getGame().getLoss(); 
+            return - getGame().getLoss(); 
         } else {
             return super.bonus(value);
         }

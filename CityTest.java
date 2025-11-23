@@ -15,7 +15,8 @@ import java.util.Random;
 public class CityTest
 {
     private Game game;
-    private Country country1, country2;
+    private Country country1;
+    private MafiaCountry country2;
     private City cityA, cityB, cityC, cityD, cityE, cityF, cityG;
 
     @Test
@@ -37,21 +38,39 @@ public class CityTest
     @Test
     public void arrive() {
         country1.setGame(game);
-        int sum = 0;
-        //Test arrive on cityA
+        country2.setGame(game);
+        
+        int sum1 = 0;
+        int sum2 = 0;
+        //Test arrive on cityA (normal country) & cityE (mafia country)
         for(int seed = 0; seed<1000; seed++) {          //Try different seeds
             game.getRandom().setSeed(seed);             //Set seed
-            int bonus = country1.bonus(80);             //Remember bonus
+            int bonus1 = country1.bonus(80);            //Remember bonus
+            int bonus2 = country2.bonus(50);
+            
             game.getRandom().setSeed(seed);             //Reset seed
-            assertEquals(bonus, cityA.arrive());        //same bonus
-            assertEquals(80-bonus, cityA.getValue());   //Correct value after arrive
+            assertEquals(bonus1, cityA.arrive());       //same bonus
+            assertEquals(80-bonus1, cityA.getValue());  //Correct value after arrive
+            sum1 += bonus1;
+            
+            assertEquals(bonus2, cityE.arrive());
+            if (bonus2 > 0) {
+                assertEquals(50 - bonus2, cityE.getValue());
+                sum2 += bonus2;
+            } else {
+                //checking that the city's values isn't changed when the player is robbed
+                assertEquals(50, cityE.getValue());
+            }
             cityA.reset();
-            sum += bonus;
+            cityE.reset();
         }
-
-        int expectedSum = 1000 * 80/2; // Expected sum of all bonuses.
+        int expectedSum1 = 1000 * 80/2; // Expected sum of all bonuses.
+        int expectedSum2 = 800 * 50/2; //Expected sum of 80% of bonuses, 20% are robbed
+        
         // Testing if sum and expected sum are equal (with a 3% margin)
-        assertTrue(expectedSum * 0.97 <= sum && expectedSum * 1.03 >= sum);
+        assertTrue(expectedSum1 * 0.97 <= sum1 && sum1 <= expectedSum1 * 1.03);
+        // Testing the same for the MafiaCountry (with a 5% margin)
+        assertTrue(expectedSum2 * 0.95 <= sum2 && sum2 <= expectedSum2 * 1.05);
     }
 
     @Test
@@ -107,7 +126,7 @@ public class CityTest
 
         // Create countries
         country1 = new Country("Country 1");
-        country2 = new Country("Country 2");
+        country2 = new MafiaCountry("Country 2");
 
         // Create cities
         cityA = new City("City A", 80, country1);
