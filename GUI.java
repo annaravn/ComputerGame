@@ -188,8 +188,8 @@ public class GUI {
         menuBar = new JMenuBar();
         
         //initialize the JMenus
-        gameMenu = new JMenu();
-        logMenu = new JMenu();
+        gameMenu = new JMenu("Game");
+        logMenu = new JMenu("Log");
         
         //Add menu items to menu bar
         menuBar.add(gameMenu);
