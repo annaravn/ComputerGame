@@ -42,10 +42,11 @@ public class GUI {
     private JCheckBox random, greedy, smart;
     
     /** Textfields */
-    private JTextField tollSizeTextField, robberyTextField;
+    private JTextField tollSizeTextField, robberyTextField, minLossTextField, maxLossTextField;
     
     /** Buttons */
-    private JButton optionsButton, newGameButton, pauseResumeButton, abortButton;
+    private JButton optionsButton, newGameButton, pauseResumeButton,
+    abortButton, playLogButton, saveLogButton;
     
     /** Reference to the Game instance */
     private Game game;
@@ -244,7 +245,9 @@ public class GUI {
         
             //Text-fields
             tollSizeTextField.setText(""+game.getSettings().getTollToBePaid());
-            robberyTextField.setText(""+game.getSettings().getRisk());    
+            robberyTextField.setText(""+game.getSettings().getRisk());
+            minLossTextField.setText(""+game.getSettings().getMinRobbery());
+            maxLossTextField.setText(""+game.getSettings().getMaxRobbery());
         
             //Game speed
             speed = game.getSettings().getGameSpeed();
@@ -375,7 +378,7 @@ public class GUI {
     public JPanel createButtonPanel(){
         //Initialize the JPanel, using a GridLayout
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(1,4));                                  
+        buttons.setLayout(new GridLayout(2,3));                                  
         
         //Instantiate the 'New'-button
         newGameButton = new JButton("New game");
@@ -405,6 +408,20 @@ public class GUI {
         optionsButton.addActionListener(e -> showOptions());
         buttons.add(optionsButton); 
         
+        //Add the 'Play log'-button
+        playLogButton = new JButton("Play log...");
+        //Connect to ActionListener
+        playLogButton.addActionListener(e -> testPlayButton());   
+        //Add it to the Button Panel
+        buttons.add(playLogButton);
+        
+        //Add the 'Save log'-button
+        saveLogButton = new JButton("Save log...");
+        //Connect to ActionListener
+        saveLogButton.addActionListener(e -> testSaveButton());   
+        //Add it to the Button Panel
+        buttons.add(saveLogButton);
+        
         //Return the JPanel
         return buttons;
     }
@@ -420,21 +437,48 @@ public class GUI {
         game.getSettings().setActive(2, smart.isSelected());
         
         //Toll size & robbery
-        int tollSize, riskRob = 0;
+        int tollSize=0, riskRob=0, min=0, max = 0;
+        
+        //Create a StringBuilder object to build an error message to the user
+        // if the input is wrong
+        StringBuilder sb = new StringBuilder();
+        
+        //Create a booelan variable to control whether the input was correct or not
+        boolean inputIsCorrect = true;
+            
         try{
             tollSize = Integer.parseInt(tollSizeTextField.getText());
             riskRob  = Integer.parseInt(robberyTextField.getText());
+            min = Integer.parseInt(minLossTextField.getText());
+            max = Integer.parseInt(maxLossTextField.getText());
+            
             if(tollSize < 0 || riskRob < 0 || tollSize > 50 || riskRob > 50){
-                JOptionPane.showMessageDialog(mainFrame, "'Toll size' and 'Risk rob' must be between 0 and 50.", "Malformed input", JOptionPane.ERROR_MESSAGE);
+                sb.append("'Toll size' and 'Risk rob' must be between 0 and 50.\n");
+                inputIsCorrect = false;
+            }
+            if(min < 0 || min > 100 || max < 0 || max > 100) {
+                sb.append("'Min. loss' and 'Max. loss' must be between 0 and 100.\n");
+                inputIsCorrect = false;
+            }
+            if(min > max) {
+                sb.append("'Min. loss' must be smaller than or equal to 'Max. loss'.\n");
+                inputIsCorrect = false;
+            }
+            
+        } catch (NumberFormatException e){
+            sb.append("'Toll size', 'Risk rob', 'Min loss' and 'Max loss' must all be integers.");
+            inputIsCorrect = false;
+        }finally {
+            if (!inputIsCorrect) {
+                JOptionPane.showMessageDialog(mainFrame, sb.toString(), "Malformed input",
+                JOptionPane.ERROR_MESSAGE);
                 return;
             }
-        } catch (NumberFormatException e){
-            JOptionPane.showMessageDialog(mainFrame, "'Toll size' and 'Risk rob' must be integers.", "Malformed input", JOptionPane.ERROR_MESSAGE);
-            return;
         }
         
         game.getSettings().setRisk(riskRob);
         game.getSettings().setTollToBePaid(tollSize);
+        game.getSettings().setMinMaxRobbery(min, max);
        
         
         mainFrame.setVisible(false);
@@ -512,7 +556,7 @@ public class GUI {
         
         //Text input
         JPanel tollAndRobberyPanel = new JPanel();
-        tollAndRobberyPanel.setLayout(new GridLayout(2,3,5,5));                     
+        tollAndRobberyPanel.setLayout(new GridLayout(4,3,5,5));                     
         
         //Toll size
         JLabel tollSizeLabel = new JLabel("Toll to be paid:");
@@ -533,6 +577,26 @@ public class GUI {
 
         JLabel percrobbery = new JLabel("% in [0,50]");
         tollAndRobberyPanel.add(percrobbery);
+        
+        //Min loss when robbed 
+        JLabel minLossLabel = new JLabel("Min. loss when robbed:");
+        tollAndRobberyPanel.add(minLossLabel);
+        
+        minLossTextField = new JTextField("10", 10);
+        tollAndRobberyPanel.add(minLossTextField);
+        
+        JLabel percminLoss = new JLabel("€ in [0,100]");
+        tollAndRobberyPanel.add(percminLoss);
+        
+        //Max loss when robbed
+        JLabel maxLossLabel = new JLabel("Max. loss when robbed:");
+        tollAndRobberyPanel.add(maxLossLabel);
+        
+        maxLossTextField = new JTextField("50", 10);
+        tollAndRobberyPanel.add(maxLossTextField);
+        
+        JLabel percmaxLoss = new JLabel("€ in [0,100]");
+        tollAndRobberyPanel.add(percmaxLoss);
         
         
         //Speed options

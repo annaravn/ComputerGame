@@ -153,7 +153,6 @@ public class CountryTest
         country1.addCity(cityF);
         //check that the size increased by 1
         assertEquals(amount + 1, country1.getCities().size());
-        
     }
     
     @Test

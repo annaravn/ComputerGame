@@ -54,13 +54,8 @@ public class CityTest
             sum1 += bonus1;
             
             assertEquals(bonus2, cityE.arrive());
-            if (bonus2 > 0) {
-                assertEquals(50 - bonus2, cityE.getValue());
-                sum2 += bonus2;
-            } else {
-                //checking that the city's values isn't changed when the player is robbed
-                assertEquals(50, cityE.getValue());
-            }
+            assertEquals(50 - Math.max(bonus2,0), cityE.getValue());
+            sum2 += Math.max(bonus2,0);
             cityA.reset();
             cityE.reset();
         }
