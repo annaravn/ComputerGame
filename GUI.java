@@ -34,6 +34,12 @@ public class GUI {
     
     /** The JFileChooser object used for I/O (logs) */
     private JFileChooser fileChooser;
+    
+    /** The JMenuBar for the game */
+    private JMenuBar menuBar;
+    
+    /** The JMenu items */
+    private JMenu gameMenu, logMenu;
 
     /** More graphical components */
     private JRadioButton slowButton, medButton, fastButton, sonicButton;
@@ -178,6 +184,17 @@ public class GUI {
         superpanel.add(panel);
         superpanel.add(buttons);
         
+        //Initialize JMenuBar
+        menuBar = new JMenuBar();
+        
+        //initialize the JMenus
+        gameMenu = new JMenu();
+        logMenu = new JMenu();
+        
+        //Add menu items to menu bar
+        menuBar.add(gameMenu);
+        menuBar.add(logMenu);
+        
         //Initialize and setup the the JFrame
         mainFrame = new JFrame("Nordic Traveller - Introduktion til Programmering");
         mainFrame.add(superpanel);
@@ -185,6 +202,8 @@ public class GUI {
         mainFrame.setResizable(false);
         mainFrame.setContentPane(superpanel);
         mainFrame.setVisible(true);
+        mainFrame.setJMenuBar(menuBar);
+        
         
         panel.requestFocusInWindow();
         KeyListener kl = new KeyListener(){
