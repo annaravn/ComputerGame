@@ -471,6 +471,7 @@ public class GUI {
             min = Integer.parseInt(minLossTextField.getText());
             max = Integer.parseInt(maxLossTextField.getText());
             
+            //Accumulating other other errors than just the execption, in case anything else is wron
             if(tollSize < 0 || riskRob < 0 || tollSize > 50 || riskRob > 50){
                 sb.append("'Toll size' and 'Risk rob' must be between 0 and 50.\n");
                 inputIsCorrect = false;
