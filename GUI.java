@@ -182,75 +182,6 @@ public class GUI {
         superpanel.setLayout(new BoxLayout(superpanel, BoxLayout.Y_AXIS));
         superpanel.add(panel);
         superpanel.add(buttons);
-
-        //Initialize JMenuBar
-        menuBar = new JMenuBar();
-
-        //Initialize the JMenus
-        gameMenu = new JMenu("Game");
-        logMenu = new JMenu("Log");
-
-        //Add menu items to menu bar
-        menuBar.add(gameMenu);
-        menuBar.add(logMenu);
-
-        //Declare, initialize and add buttons to the gameMenu
-        JMenuItem newGameItem = new JMenuItem("New game");
-        gameMenu.add(newGameItem);
-        newGameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,CTRL_SHIFT));
-        newGameItem.addActionListener(e -> newGameButton.doClick());
-
-        JMenuItem pauseResumeItem = new JMenuItem("Pause/Resume game");
-        gameMenu.add(pauseResumeItem);
-        pauseResumeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,CTRL_SHIFT));
-        pauseResumeItem.addActionListener(e -> pauseResumeButton.doClick());
-
-        JMenuItem abortItem = new JMenuItem("Abort game");
-        gameMenu.add(abortItem);
-        abortItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,CTRL_SHIFT));
-        abortItem.addActionListener(e -> abortButton.doClick());
-
-        JMenuItem optionsItem = new JMenuItem("Options...");
-        gameMenu.add(optionsItem);
-        optionsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,CTRL_SHIFT));
-        optionsItem.addActionListener(e -> optionsButton.doClick());
-
-        //Initialize set speed menu and add it to the game menu
-        JMenu setSpeedMenu = new JMenu("Set speed");
-        gameMenu.add(setSpeedMenu);
-
-        //Buttons for set speed menu
-        JMenuItem slowItem = new JMenuItem("Slow");
-        setSpeedMenu.add(slowItem);
-        slowItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,CTRL));
-        slowItem.addActionListener(e -> setSpeed(1));
-
-        JMenuItem mediumItem = new JMenuItem("Medium");
-        setSpeedMenu.add(mediumItem);
-        mediumItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,CTRL));
-        mediumItem.addActionListener(e -> setSpeed(2));
-
-        JMenuItem fastItem = new JMenuItem("Fast");
-        setSpeedMenu.add(fastItem);
-        fastItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3,CTRL));
-        fastItem.addActionListener(e -> setSpeed(3));
-
-        JMenuItem sonicItem = new JMenuItem("Sonic");
-        setSpeedMenu.add(sonicItem);
-        sonicItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4,CTRL));
-        sonicItem.addActionListener(e -> setSpeed(4));
-
-        //Declare, initialize and add buttons to the logMenu
-        JMenuItem playLogItem = new JMenuItem("Play log");
-        logMenu.add(playLogItem);
-        playLogItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,CTRL_SHIFT));
-        playLogItem.addActionListener(e -> playLogButton.doClick());
-
-        JMenuItem saveLogItem = new JMenuItem("Save log");
-        logMenu.add(saveLogItem);
-        saveLogItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,CTRL_SHIFT));
-        saveLogItem.addActionListener(e -> saveLogButton.doClick());
-
         
         //Initialize and setup the the JFrame
         mainFrame = new JFrame("Nordic Traveller - Introduktion til Programmering");
@@ -259,7 +190,7 @@ public class GUI {
         mainFrame.setResizable(false);
         mainFrame.setContentPane(superpanel);
         mainFrame.setVisible(true);
-        mainFrame.setJMenuBar(menuBar);
+        makeMenuBar(mainFrame); //Make menubar
 
         panel.requestFocusInWindow();
         KeyListener kl = new KeyListener(){
@@ -329,6 +260,78 @@ public class GUI {
                     setSpeed(speed);
             });
 
+    }
+    
+    private void makeMenuBar(JFrame frame) {
+        //Initialize JMenuBar
+        menuBar = new JMenuBar();
+
+        //Initialize the JMenus
+        gameMenu = new JMenu("Game");
+        logMenu = new JMenu("Log");
+
+        //Add menu items to menu bar
+        menuBar.add(gameMenu);
+        menuBar.add(logMenu);
+
+        //Declare, initialize and add buttons to the gameMenu
+        JMenuItem newGameItem = new JMenuItem("New game");
+        gameMenu.add(newGameItem);
+        newGameItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,CTRL_SHIFT));
+        newGameItem.addActionListener(e -> newGameButton.doClick());
+
+        JMenuItem pauseResumeItem = new JMenuItem("Pause/Resume game");
+        gameMenu.add(pauseResumeItem);
+        pauseResumeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,CTRL_SHIFT));
+        pauseResumeItem.addActionListener(e -> pauseResumeButton.doClick());
+
+        JMenuItem abortItem = new JMenuItem("Abort game");
+        gameMenu.add(abortItem);
+        abortItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,CTRL_SHIFT));
+        abortItem.addActionListener(e -> abortButton.doClick());
+
+        JMenuItem optionsItem = new JMenuItem("Options...");
+        gameMenu.add(optionsItem);
+        optionsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,CTRL_SHIFT));
+        optionsItem.addActionListener(e -> optionsButton.doClick());
+
+        //Initialize set speed menu and add it to the game menu
+        JMenu setSpeedMenu = new JMenu("Set speed");
+        gameMenu.add(setSpeedMenu);
+
+        //Buttons for set speed menu
+        JMenuItem slowItem = new JMenuItem("Slow");
+        setSpeedMenu.add(slowItem);
+        slowItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,CTRL));
+        slowItem.addActionListener(e -> setSpeed(1));
+
+        JMenuItem mediumItem = new JMenuItem("Medium");
+        setSpeedMenu.add(mediumItem);
+        mediumItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,CTRL));
+        mediumItem.addActionListener(e -> setSpeed(2));
+
+        JMenuItem fastItem = new JMenuItem("Fast");
+        setSpeedMenu.add(fastItem);
+        fastItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3,CTRL));
+        fastItem.addActionListener(e -> setSpeed(3));
+
+        JMenuItem sonicItem = new JMenuItem("Sonic");
+        setSpeedMenu.add(sonicItem);
+        sonicItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4,CTRL));
+        sonicItem.addActionListener(e -> setSpeed(4));
+
+        //Declare, initialize and add buttons to the logMenu
+        JMenuItem playLogItem = new JMenuItem("Play log");
+        logMenu.add(playLogItem);
+        playLogItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,CTRL_SHIFT));
+        playLogItem.addActionListener(e -> playLogButton.doClick());
+
+        JMenuItem saveLogItem = new JMenuItem("Save log");
+        logMenu.add(saveLogItem);
+        saveLogItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,CTRL_SHIFT));
+        saveLogItem.addActionListener(e -> saveLogButton.doClick());
+
+        mainFrame.setJMenuBar(menuBar);
     }
 
     /**
@@ -527,12 +530,20 @@ public class GUI {
             min = Integer.parseInt(minLossTextField.getText());
             max = Integer.parseInt(maxLossTextField.getText());
             //Accumulating other other errors than just the execption, in case anything else is wron
-            if(tollSize < 0 || riskRob < 0 || tollSize > 50 || riskRob > 50){
-                sb.append("'Toll size' and 'Risk rob' must be between 0 and 50.\n");
+            if( riskRob < 0 ||riskRob > 50){
+                sb.append("'Risk rob' must be between 0 and 50.\n");
                 inputIsCorrect = false;
             }
-            if(min < 0 || min > 100 || max < 0 || max > 100) {
-                sb.append("'Min. loss' and 'Max. loss' must be between 0 and 100.\n");
+            if(tollSize < 0 || tollSize > 50) {
+                sb.append("'Toll size' must be between 0 and 50.\n");
+                inputIsCorrect = false;
+            }
+            if(max < 0 || max > 100) {
+                sb.append("'Max. loss' must be between 0 and 100.\n");
+                inputIsCorrect = false;
+            }
+            if(min < 0 || min > 100) {
+                sb.append("'Min. loss'must be between 0 and 100.\n");
                 inputIsCorrect = false;
             }
             if(min > max) {
