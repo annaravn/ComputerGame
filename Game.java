@@ -15,21 +15,22 @@ import java.util.Set;
 /**
  * A Game object is an instance of NordicTraveller.
  * @author Nikolaj Ignatieff Schwartzbach.
- * @version August 2019.
+ * @version December 2020.
  */
 public class Game {
 
     private List<Country> countries;       // List of all countries in the game
     private List<Player>  players;         // List of all players.
-    private GUIPlayer guiPlayer;           // Reference to the GUI Player
+    private Player guiPlayer;           // Reference to the GUI Player
     private Random random;                 // Reference to random generator
     private boolean logging;               // Boolean telling whether the game is being logged
-    private int totalSteps = 600;           // Total number of steps
+    private int totalSteps = 500;           // Total number of steps
     private int stepsLeft = totalSteps;    // Steps left
     private int seed;                      // Seed of this Game instance (used for Random)
     private Map<City, Point> guiPosition;  // Positions in the GUI for the various cities (in pixels)
     private Settings settings;             // Settings for this Game
     private boolean aborted=false;         // Boolean telling whethe this Game is forcefully aborted
+    private Log log;
 
     /**
      * Creates a new Game object with a random seed.
@@ -59,6 +60,9 @@ public class Game {
         } catch(IOException|SettingsException e) {
             settings = new Settings();
         }
+        
+        // Initialize log
+        log = new Log(seed, settings);
     }
 
     /**
@@ -94,10 +98,8 @@ public class Game {
                 switch(args[0].toLowerCase()) {
                     case "background": break;
                     case "game": game = new Game(Integer.parseInt(args[1])); break;
-                    case "country": game.addCountry(args.length > 2 && args[2].equals("mafia") ? new MafiaCountry(args[1]) : new Country(args[1])); country = args[1]; break;
-                    case "city": 
-                        String lbl = args.length > 3 ? args[3] : "";
-                        game.addCity(args[1], Integer.parseInt(args[2]), country, lbl); break;
+                    case "country": game.addCountry(new Country(args[1])); country = args[1]; break;
+                    case "city": game.addCity(args[1], Integer.parseInt(args[2]), country); break;
                     case "road": game.addRoads(args[1], args[2], Integer.parseInt(args[3])); break;
                     case "position": game.putPosition(game.getCity(args[1].trim()),
                         new Point(Integer.parseInt(args[2]), Integer.parseInt(args[3]))); break;
@@ -133,6 +135,15 @@ public class Game {
      */
     public boolean ongoing() {
         return !aborted && stepsLeft!=0;
+    }
+
+    
+    /**
+     * Gets the Log object of this Game.
+     * @return  Reference to the Log object of this Game.
+     */
+    public Log getLog() {
+        return log;
     }
     
     /**
@@ -193,32 +204,30 @@ public class Game {
      * @param value   The initial value of the city.
      * @param contry  The name of the country.
      */    
-    public void addCity(String name, int value, String country, String lbl) {
+    public void addCity(String name, int value, String country) {
         for(Country c : countries) {
             if(c.getName().equals(country.trim())) {
-                switch(lbl){
-                    case "capital":
-                        c.addCity(new CapitalCity(name, value, c));
-                        break;
-                    case "border":
-                        c.addCity(new BorderCity(name, value, c));
-                        break;
-                    default:
-                        c.addCity(new City(name, value, c));
-                        break;
-                }
+                c.addCity(new City(name, value, c));
                 return;
             }
         }
     }
 
+    public void reset(){
+    	reset(true);
+    }
     /**
      * Resets this Game object (by resetting the log, Random object and all countries).
      * Assigns random positions to all players.
      */
-    public void reset() {
-        seed = random.nextInt(Integer.MAX_VALUE);
+    public void reset(boolean resetSeed) {
+        if(resetSeed){
+            seed = random.nextInt(Integer.MAX_VALUE);
+            removeLogPlayer();
+        }
         random = new Random(seed);
+        log = new Log(seed, settings);
+
         stepsLeft = totalSteps;
         aborted = false;
         
@@ -314,6 +323,7 @@ public class Game {
         if(stepsLeft == 0 || aborted) {
             return;
         }
+        stepsLeft--;
         Collections.sort(players);
         for(Player p : players) {
             if(p.getClass()==RandomPlayer.class && !settings.isActive(0)) { continue; }
@@ -324,7 +334,6 @@ public class Game {
                 p.setMoney(0);
             }
         }
-        stepsLeft--;
     }
 
     /**
@@ -342,7 +351,9 @@ public class Game {
      * @param c The city to click.
      */
     public void clickCity(City c) {
-        guiPlayer.travelTo(c);
+        if(!(guiPlayer instanceof LogPlayer))
+            ((GUIPlayer)guiPlayer).travelTo(c);
+        log.add(totalSteps - stepsLeft, c);
     }
 
     /**
@@ -381,5 +392,50 @@ public class Game {
      */
     public void setTotalSteps(int totalSteps) {
         this.totalSteps = totalSteps;
+    }
+
+    /**
+     * Plays a given Log object within this Game window.
+     * Will remove the normal GUI-controlled Player and replace with an instance of LogPlayer.
+     * Also resets the game to the seed specified in the log.
+     * @param log The Log to play
+     */
+    public void playLog(Log log){
+        LogPlayer lp = new LogPlayer(log, guiPlayer.getPosition());
+        List<Player> newPlayers = new ArrayList<Player>();
+        for(Player p : players){
+            if(p instanceof RandomPlayer || p instanceof GreedyPlayer || p instanceof SmartPlayer)
+                newPlayers.add(p);
+        }
+        newPlayers.add(lp);
+        guiPlayer = lp;
+        players = newPlayers;
+        Collections.sort(players);
+        this.seed = log.getSeed();
+        this.settings = log.getSettings();
+        reset(false);
+        logging = true;
+    }
+
+    /**
+     * Removes the current LogPlayer instance, and replaces it with a regular Player object.
+     * Also resets this Game instance.
+     */
+    private void removeLogPlayer(){
+        List<Player> newPlayers = new ArrayList<Player>();
+        boolean seenGUIPlayer = false;
+        for(Player p : players){
+            if(!(p instanceof LogPlayer))
+                newPlayers.add(p);
+            if(p.getClass() == GUIPlayer.class){
+                seenGUIPlayer = true;
+            }
+        }
+        players = newPlayers;
+        if(!seenGUIPlayer){
+            GUIPlayer newGuiPlayer = new GUIPlayer(guiPlayer.getPosition());
+            setGUIPlayer(newGuiPlayer);
+        }
+        Collections.sort(players);
     }
 }
