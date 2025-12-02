@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.ObjectOutputStream;
 
 /**
  * A GUI written in Java Swing which wraps around a Game instance.
@@ -182,7 +183,7 @@ public class GUI {
         superpanel.setLayout(new BoxLayout(superpanel, BoxLayout.Y_AXIS));
         superpanel.add(panel);
         superpanel.add(buttons);
-        
+
         //Initialize and setup the the JFrame
         mainFrame = new JFrame("Nordic Traveller - Introduktion til Programmering");
         mainFrame.add(superpanel);
@@ -261,7 +262,7 @@ public class GUI {
             });
 
     }
-    
+
     private void makeMenuBar(JFrame frame) {
         //Initialize JMenuBar
         menuBar = new JMenuBar();
@@ -489,14 +490,15 @@ public class GUI {
         //Add the 'Play log'-button
         playLogButton = new JButton("Play log...");
         //Connect to ActionListener
-        playLogButton.addActionListener(e -> testPlayButton());   
+        playLogButton.addActionListener(e -> playButton());   
         //Add it to the Button Panel
         buttons.add(playLogButton);
 
         //Add the 'Save log'-button
         saveLogButton = new JButton("Save log...");
         //Connect to ActionListener
-        saveLogButton.addActionListener(e -> testSaveButton());   
+        //saveLogButton.addActionListener(e -> testSaveButton());   
+        saveLogButton.addActionListener(e -> saveButton()); 
         //Add it to the Button Panel
         buttons.add(saveLogButton);
 
@@ -773,12 +775,64 @@ public class GUI {
         JOptionPane.showMessageDialog(mainFrame, "You have clicked the 'Save' button.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    private void saveButton() {
+        int choice;
+        try {
+            choice = fileChooser.showSaveDialog(mainFrame);
+        } catch(Exception HeadlessException){
+            JOptionPane.showMessageDialog(mainFrame, "headless exception", "error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } 
+
+        if (choice == 0) {
+            try {
+                saveToFile(fileChooser.getSelectedFile().toString());
+            } catch (Exception IOException) {
+                JOptionPane.showMessageDialog(mainFrame, "io exception", "error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+
+    }
+
+    private void saveToFile(String destinationFile) throws IOException {
+        Path destination = Paths.get(destinationFile).toAbsolutePath();
+        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(destination.toString()));
+        os.writeObject(game.getLog());
+        os.close();
+    }
+
     /**
      * Tests the Play button.
      * This method is invoked when testing the functionality of the Play button.
      */
     private void testPlayButton(){
         JOptionPane.showMessageDialog(mainFrame, "You have clicked the 'Play' button.", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void playButton() {
+        int choice;
+        try {
+            choice = fileChooser.showOpenDialog(mainFrame);
+        } catch(Exception HeadlessException) {
+            JOptionPane.showMessageDialog(mainFrame, "headless exception", "error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (choice == 0) {
+            try {
+                openFile(fileChooser.getSelectedFile().toString());
+            }        
+            catch(Exception ClassNotFoundException){
+                JOptionPane.showMessageDialog(mainFrame, "classnotfound exception", "error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void openFile(String destinationFile) throws ClassNotFoundException, IOException {
+        Path destination = Paths.get(destinationFile).toAbsolutePath();
+        ObjectInputStream is = new ObjectInputStream(new FileInputStream(destination.toString()));
+        Log savedLog = (Log) is.readObject();
+        game.playLog(savedLog);
     }
 
     /**
