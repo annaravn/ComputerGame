@@ -13,6 +13,7 @@ import javax.swing.Timer;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.ObjectOutputStream;
+import java.io.IOException;
 
 /**
  * A GUI written in Java Swing which wraps around a Game instance.
@@ -490,7 +491,7 @@ public class GUI {
         //Add the 'Play log'-button
         playLogButton = new JButton("Play log...");
         //Connect to ActionListener
-        playLogButton.addActionListener(e -> playButton());   
+        playLogButton.addActionListener(e -> playLog());   
         //Add it to the Button Panel
         buttons.add(playLogButton);
 
@@ -498,7 +499,7 @@ public class GUI {
         saveLogButton = new JButton("Save log...");
         //Connect to ActionListener
         //saveLogButton.addActionListener(e -> testSaveButton());   
-        saveLogButton.addActionListener(e -> saveButton()); 
+        saveLogButton.addActionListener(e -> saveLog()); 
         //Add it to the Button Panel
         buttons.add(saveLogButton);
 
@@ -775,31 +776,30 @@ public class GUI {
         JOptionPane.showMessageDialog(mainFrame, "You have clicked the 'Save' button.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void saveButton() {
+    /**
+     * Saves the logs of the currently played game to be replayed later
+     */
+    private void saveLog() {
         int choice;
-        try {
-            choice = fileChooser.showSaveDialog(mainFrame);
-        } catch(Exception HeadlessException){
-            JOptionPane.showMessageDialog(mainFrame, "headless exception", "error", JOptionPane.ERROR_MESSAGE);
+        try{
+            choice = fileChooser.showSaveDialog(mainFrame); //Pop up a window that lets you choose where to save a file
+        } catch(HeadlessException e) {
+            JOptionPane.showMessageDialog(mainFrame, "You need a keyboad and a mouse to play this game", "error", JOptionPane.ERROR_MESSAGE);
             return;
-        } 
+        }
+        if (choice != fileChooser.APPROVE_OPTION) { //Check that we actually chose a file
+            return; 
+        }
+        try(ObjectOutputStream os = new ObjectOutputStream(
+                new FileOutputStream(fileChooser.getSelectedFile()))) {
+            os.writeObject(game.getLog()); //save the current game log to the selected file
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(mainFrame, "File not found", "error", JOptionPane.ERROR_MESSAGE);
 
-        if (choice == 0) {
-            try {
-                saveToFile(fileChooser.getSelectedFile().toString());
-            } catch (Exception IOException) {
-                JOptionPane.showMessageDialog(mainFrame, "io exception", "error", JOptionPane.ERROR_MESSAGE);
-            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(mainFrame, "IO exception", "error", JOptionPane.ERROR_MESSAGE);
 
         }
-
-    }
-
-    private void saveToFile(String destinationFile) throws IOException {
-        Path destination = Paths.get(destinationFile).toAbsolutePath();
-        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(destination.toString()));
-        os.writeObject(game.getLog());
-        os.close();
     }
 
     /**
@@ -810,29 +810,30 @@ public class GUI {
         JOptionPane.showMessageDialog(mainFrame, "You have clicked the 'Play' button.", "Information", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void playButton() {
+    /**
+     * Plays an earlier game from a saved log file
+     */
+    private void playLog() {
         int choice;
-        try {
-            choice = fileChooser.showOpenDialog(mainFrame);
-        } catch(Exception HeadlessException) {
-            JOptionPane.showMessageDialog(mainFrame, "headless exception", "error", JOptionPane.ERROR_MESSAGE);
+        try{
+            choice = fileChooser.showOpenDialog(mainFrame); //Pop up a window that lets you choose a file to open.
+        } catch(HeadlessException e) {
+            JOptionPane.showMessageDialog(mainFrame, "You need a keyboad and a mouse to play this game", "error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (choice == 0) {
-            try {
-                openFile(fileChooser.getSelectedFile().toString());
-            }        
-            catch(Exception ClassNotFoundException){
-                JOptionPane.showMessageDialog(mainFrame, "classnotfound exception", "error", JOptionPane.ERROR_MESSAGE);
-            }
+        if (choice != fileChooser.APPROVE_OPTION) { //Check that we actually chose a file
+            return; 
         }
-    }
-
-    private void openFile(String destinationFile) throws ClassNotFoundException, IOException {
-        Path destination = Paths.get(destinationFile).toAbsolutePath();
-        ObjectInputStream is = new ObjectInputStream(new FileInputStream(destination.toString()));
-        Log savedLog = (Log) is.readObject();
-        game.playLog(savedLog);
+        try(ObjectInputStream os = new ObjectInputStream
+            (new FileInputStream(fileChooser.getSelectedFile()))) {
+            game.playLog((Log) os.readObject()); //play the log from the selected file
+        }catch (ClassNotFoundException e){
+            JOptionPane.showMessageDialog(mainFrame, "Class not found", "error", JOptionPane.ERROR_MESSAGE);
+        }catch(FileNotFoundException e) {
+            JOptionPane.showMessageDialog(mainFrame, "File not found", "error", JOptionPane.ERROR_MESSAGE);
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(mainFrame, "IO exception", "error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
