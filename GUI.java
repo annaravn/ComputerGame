@@ -193,9 +193,10 @@ public class GUI {
 
         //Initialize the super JPanel (which contains the other JPanels)
         superpanel = new JPanel();
-        superpanel.setLayout(new BoxLayout(superpanel, BoxLayout.Y_AXIS));
-        superpanel.add(panel);
-        superpanel.add(buttons);
+        superpanel.setLayout(new BorderLayout());
+        superpanel.add(panel, BorderLayout.CENTER);
+        superpanel.add(buttons, BorderLayout.SOUTH);
+        superpanel.add(userChoices, BorderLayout.EAST);
 
         //Initialize and setup the the JFrame
         mainFrame = new JFrame("Nordic Traveller - Introduktion til Programmering");
