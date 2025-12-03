@@ -56,6 +56,9 @@ public class GUI {
     private JButton optionsButton, newGameButton, pauseResumeButton,
     abortButton, playLogButton, saveLogButton;
 
+    /** Text area */
+    private JTextArea choiceText;
+
     /** Reference to the Game instance */
     private Game game;
 
@@ -108,6 +111,15 @@ public class GUI {
         //Initialize ActorPanel
         panel = new WorldPanel(game);
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+        //Initialize Area text
+        choiceText = new JTextArea(0,15);
+        choiceText.setText("User Choices:");
+        choiceText.setMargin(new Insets(10,10,10,10));
+        choiceText.setEditable(false); //The text field cannot be edited
+        JScrollPane userChoices = new JScrollPane(choiceText,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         //Handle mouse click events in the inner window
         panel.addMouseListener(new MouseAdapter() {
@@ -227,6 +239,7 @@ public class GUI {
 
     private void clickCity(City c) {
         game.clickCity(c);
+        choiceText.append("\n * Step " + game.getStepsLeft() + ": " + c.getName());
     }
 
     /**
